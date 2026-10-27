@@ -20,4 +20,64 @@
             android:visibility="gone">
         </FrameLayout>
     </LinearLayout>
+    <!-- BOTTOM NAVIGATION BAR -->
+    <LinearLayout
+        android:id="@+id/bottomNavLayout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#120F1A"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:elevation="16dp">
+        <LinearLayout
+            android:id="@+id/tabChat"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🎙️" android:textSize="20sp"/>
+            <TextView android:id="@+id/tvTabChat" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="AI Chat" android:textColor="#FFFFFF" android:textSize="12sp" android:textStyle="bold"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/tabDisease"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🌿" android:textSize="20sp"/>
+            <TextView android:id="@+id/tvTabDisease" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Scan" android:textColor="#AFAFAF" android:textSize="12sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/tabMandi"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🌾" android:textSize="20sp"/>
+            <TextView android:id="@+id/tvTabMandi" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mandi" android:textColor="#AFAFAF" android:textSize="12sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/tabForecast"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🌦️" android:textSize="20sp"/>
+            <TextView android:id="@+id/tvTabForecast" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Forecast" android:textColor="#AFAFAF" android:textSize="12sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/tabSchemes"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏛️" android:textSize="20sp"/>
+            <TextView android:id="@+id/tvTabSchemes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Schemes" android:textColor="#AFAFAF" android:textSize="12sp"/>
+        </LinearLayout>
+    </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
