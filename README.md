@@ -56,7 +56,7 @@ Smallholder and marginal farmers across India face severe information bottleneck
 - **AI / ML Models**: Dhenu2-In-Llama3.1-8B-Instruct (GGUF), Prithvi EO Groundwater Regression Engine, MobileNet TFLite Gatekeeper, India Multi-Crop Plant Disease Classifier.
 
 ---
-
+ 
 ## 🔄 Application Workflow
 
 1. **Onboarding & Language Selection**: Farmer selects their preferred regional language (Hindi, Punjabi, Marathi, Bengali, English).
