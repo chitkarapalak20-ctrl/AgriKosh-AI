@@ -1,9 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.AgriKoshAI" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Theme.AgriKoshVoice" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- existing items -->
     </style>
 
-    <style name="Theme.AgriKoshAI" parent="Base.Theme.AgriKoshAI" />
+    <!-- Paste it here! -->
+    <style name="LangButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="backgroundTint">#2E2836</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>
