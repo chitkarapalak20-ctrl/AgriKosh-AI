@@ -22,6 +22,7 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.text.InputType
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -50,6 +51,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
+import org.tensorflow.lite.DataType
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -223,7 +225,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var currentInputEditText: EditText? = null
     private var currentInputSpinner: Spinner? = null
 
-    private val serverUrl = "http://192.168.31.92:8000/"
+    private val serverUrl = "http://10.42.56.41:8000/"
 
     private var isListening = false
     private var forceStopListening = true
@@ -594,7 +596,13 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private fun loadTFLiteModel() {
         try {
-            val fileDescriptor = assets.openFd("model.tflite")
+            val fileName = try {
+                assets.openFd("model_unquant.tflite")
+                "model_unquant.tflite"
+            } catch (e: Exception) {
+                "model.tflite"
+            }
+            val fileDescriptor = assets.openFd(fileName)
             val inputStream = java.io.FileInputStream(fileDescriptor.fileDescriptor)
             val fileChannel = inputStream.channel
             val modelBuffer = fileChannel.map(
@@ -604,9 +612,10 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             )
             tflite = Interpreter(modelBuffer)
             tfliteLabels = assets.open("labels.txt").bufferedReader().readLines()
+            Log.d("AgriKoshTFLite", "TFLite model ($fileName) loaded successfully! Labels: $tfliteLabels")
         } catch (e: Exception) {
             e.printStackTrace()
-            // Ignore error, we will fallback to server if tflite is missing
+            Log.e("AgriKoshTFLite", "Error loading TFLite model: ${e.message}", e)
         }
     }
 
@@ -828,39 +837,105 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun processDiseaseImage(bitmap: Bitmap) {
-        tvDiseaseResult.text = "Checking image locally..."
+        tvDiseaseResult.text = "Checking image locally with TFLite..."
+
+        if (tflite == null || tfliteLabels.isEmpty()) {
+            Toast.makeText(this, "Local TFLite model not initialized. Loading model...", Toast.LENGTH_SHORT).show()
+            loadTFLiteModel()
+        }
+
         if (tflite != null && tfliteLabels.isNotEmpty()) {
             try {
-                val resized = Bitmap.createScaledBitmap(bitmap, 224, 224, true)
-                val inputBuffer = ByteBuffer.allocateDirect(1 * 224 * 224 * 3)
+                val inputTensor = tflite!!.getInputTensor(0)
+                val outputTensor = tflite!!.getOutputTensor(0)
+
+                val inputDataType = inputTensor.dataType()
+                val inputShape = inputTensor.shape()
+
+                val imageWidth = if (inputShape.size >= 3) inputShape[2] else 224
+                val imageHeight = if (inputShape.size >= 3) inputShape[1] else 224
+
+                val resized = Bitmap.createScaledBitmap(bitmap, imageWidth, imageHeight, true)
+
+                val isFloat = inputDataType == DataType.FLOAT32
+                val bytesPerChannel = if (isFloat) 4 else 1
+                val inputBuffer = ByteBuffer.allocateDirect(1 * imageHeight * imageWidth * 3 * bytesPerChannel)
                 inputBuffer.order(ByteOrder.nativeOrder())
-                val intValues = IntArray(224 * 224)
-                resized.getPixels(intValues, 0, resized.width, 0, 0, resized.width, resized.height)
+
+                val intValues = IntArray(imageWidth * imageHeight)
+                resized.getPixels(intValues, 0, imageWidth, 0, 0, imageWidth, imageHeight)
 
                 var pixel = 0
-                for (i in 0 until 224) {
-                    for (j in 0 until 224) {
+                for (i in 0 until imageHeight) {
+                    for (j in 0 until imageWidth) {
                         val valInt = intValues[pixel++]
-                        inputBuffer.put(((valInt shr 16) and 0xFF).toByte())
-                        inputBuffer.put(((valInt shr 8) and 0xFF).toByte())
-                        inputBuffer.put((valInt and 0xFF).toByte())
+                        val r = (valInt shr 16) and 0xFF
+                        val g = (valInt shr 8) and 0xFF
+                        val b = valInt and 0xFF
+
+                        if (isFloat) {
+                            // Standard Teachable Machine MobileNet normalization: (val / 127.5f) - 1.0f
+                            inputBuffer.putFloat((r / 127.5f) - 1.0f)
+                            inputBuffer.putFloat((g / 127.5f) - 1.0f)
+                            inputBuffer.putFloat((b / 127.5f) - 1.0f)
+                        } else {
+                            inputBuffer.put(r.toByte())
+                            inputBuffer.put(g.toByte())
+                            inputBuffer.put(b.toByte())
+                        }
                     }
                 }
 
-                val outputBuffer = Array(1) { ByteArray(tfliteLabels.size) }
-                tflite!!.run(inputBuffer, outputBuffer)
+                val numClasses = tfliteLabels.size
+                val outputIsFloat = outputTensor.dataType() == DataType.FLOAT32
 
-                val probabilities = outputBuffer[0].map { it.toInt() and 0xFF }
-                val leafIndex = tfliteLabels.indexOfFirst { it.contains("leaf", ignoreCase = true) }.takeIf { it >= 0 } ?: 0
-                val notLeafIndex = tfliteLabels.indexOfFirst { it.contains("not", ignoreCase = true) }.takeIf { it >= 0 } ?: 1
+                val leafIndex = tfliteLabels.indexOfFirst {
+                    val clean = it.lowercase()
+                    clean.contains("leaf") && !clean.contains("not") && !clean.contains("non")
+                }.coerceAtLeast(0)
 
-                if (probabilities[leafIndex] < probabilities[notLeafIndex]) {
-                    tvDiseaseResult.text = "Error: Image does not appear to be a clear leaf. Please retake the photo."
+                val notLeafIndex = tfliteLabels.indexOfFirst {
+                    val clean = it.lowercase()
+                    clean.contains("not") || clean.contains("non") || clean.contains("other") || clean.contains("background")
+                }.let { if (it >= 0) it else (if (leafIndex == 0) 1 else 0) }
+
+                val leafProb: Float
+                val notLeafProb: Float
+
+                if (outputIsFloat) {
+                    val outputArray = Array(1) { FloatArray(numClasses) }
+                    tflite!!.run(inputBuffer, outputArray)
+                    leafProb = outputArray[0][leafIndex]
+                    notLeafProb = outputArray[0][notLeafIndex]
+                } else {
+                    val outputArray = Array(1) { ByteArray(numClasses) }
+                    tflite!!.run(inputBuffer, outputArray)
+                    leafProb = (outputArray[0][leafIndex].toInt() and 0xFF) / 255.0f
+                    notLeafProb = (outputArray[0][notLeafIndex].toInt() and 0xFF) / 255.0f
+                }
+
+                val leafPercent = (leafProb * 100).toInt()
+                val notLeafPercent = (notLeafProb * 100).toInt()
+
+                Log.d("AgriKoshTFLite", "Gatekeeper Result -> Leaf: $leafPercent%, Not Leaf: $notLeafPercent% (leafIdx=$leafIndex, notLeafIdx=$notLeafIndex)")
+
+                // Strict Threshold: Require leaf probability to be at least 75% AND higher than not_leaf
+                if (leafProb < 0.75f || leafProb <= notLeafProb) {
+                    tvDiseaseResult.text = "⚠️ Image Rejected (Local Gatekeeper)\n\n" +
+                            "Detected: Not a Leaf (${notLeafPercent}% confidence, Leaf match: ${leafPercent}%).\n\n" +
+                            "Please upload or capture a clear photo of a crop leaf to scan for diseases."
                     return
                 }
+
             } catch (e: Exception) {
                 e.printStackTrace()
+                Log.e("AgriKoshTFLite", "Gatekeeper error: ${e.message}", e)
+                tvDiseaseResult.text = "⚠️ Local gatekeeper error: ${e.localizedMessage}\n\nPlease ensure a valid leaf photo is selected."
+                return
             }
+        } else {
+            tvDiseaseResult.text = "⚠️ Local gatekeeper model not loaded.\n\nPlease ensure model.tflite is present."
+            return
         }
 
         // Passed Gatekeeper (or if TFLite missing), Upload to Fast API Server
