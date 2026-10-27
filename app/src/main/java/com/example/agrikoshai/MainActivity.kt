@@ -758,6 +758,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
         if (bitmap != null) {
+            ivDiseasePreview.imageTintList = null
             ivDiseasePreview.setImageBitmap(bitmap)
             processDiseaseImage(bitmap)
         }
@@ -766,6 +767,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private val pickGalleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            ivDiseasePreview.imageTintList = null
             ivDiseasePreview.setImageBitmap(bitmap)
             processDiseaseImage(bitmap)
         }
@@ -1472,6 +1474,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         val locale = Locale.forLanguageTag(currentLanguageCode)
         if (::tts.isInitialized && tts.isLanguageAvailable(locale) >= TextToSpeech.LANG_AVAILABLE) { tts.setLanguage(locale) }
         setupSpeechRecognizer()
+        createNewSession()
     }
 
     private fun showMainApp() {
