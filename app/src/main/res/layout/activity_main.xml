@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+    <!-- MAIN APP CONTENT -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,66 +19,850 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:visibility="gone">
+
+            <!-- 1. CHAT LAYOUT -->
+            <LinearLayout
+                android:id="@+id/layoutChat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <!-- TOP HEADER -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:id="@+id/btnOpenMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="☰"
+                        android:textColor="#FFFFFF"
+                        android:textSize="26sp"
+                        android:paddingEnd="20dp"
+                        android:textStyle="bold"/>
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/btnNewChatHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="➕ New Chat"
+                        android:textColor="#AFAFAF"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:paddingStart="16dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:clipChildren="false">
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/voiceOrb"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginBottom="12dp"
+                        app:cardBackgroundColor="#E91E63"
+                        app:cardCornerRadius="40dp"
+                        app:cardElevation="10dp" />
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tap to Speak (Tap again to stop)"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <ScrollView
+                    android:id="@+id/chatScrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:paddingHorizontal="16dp"
+                    android:clipToPadding="true"
+                    android:clipChildren="true">
+                    <LinearLayout
+                        android:id="@+id/chatContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp" />
+                </ScrollView>
+
+                <LinearLayout
+                    android:id="@+id/inputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <EditText
+                        android:id="@+id/etMessage"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:background="#2E2836"
+                        android:hint="Type or edit prompt..."
+                        android:textColorHint="#AFAFAF"
+                        android:textColor="#FFFFFF"
+                        android:paddingHorizontal="16dp"
+                        android:textSize="15sp" />
+                    <Button
+                        android:id="@+id/btnSend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="#00E676"
+                        android:text="Send"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        app:cornerRadius="12dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 2. MANDI LAYOUT -->
+            <LinearLayout
+                android:id="@+id/layoutMandi"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvMandiHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🌾 Live Mandi Rates"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+                <TextView
+                    android:id="@+id/tvSelectDistrict"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select District:"
+                    android:textColor="#AFAFAF"
+                    android:layout_marginBottom="4dp"/>
+                <Spinner
+                    android:id="@+id/spinnerDistrict"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="#2E2836"
+                    android:popupBackground="#2E2836"
+                    android:layout_marginBottom="12dp"/>
+                <TextView
+                    android:id="@+id/tvSelectMarket"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select Sub-Market (Mandi):"
+                    android:textColor="#AFAFAF"
+                    android:layout_marginBottom="4dp"/>
+                <Spinner
+                    android:id="@+id/spinnerMarket"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="#2E2836"
+                    android:popupBackground="#2E2836"
+                    android:layout_marginBottom="12dp"/>
+                <TextView
+                    android:id="@+id/tvSelectCrop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select Crop:"
+                    android:textColor="#AFAFAF"
+                    android:layout_marginBottom="4dp"/>
+                <Spinner
+                    android:id="@+id/spinnerCrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="#2E2836"
+                    android:popupBackground="#2E2836"
+                    android:layout_marginBottom="24dp"/>
+                <Button
+                    android:id="@+id/btnRefreshMandi"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Check Prices"
+                    android:backgroundTint="#00E676"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"
+                    app:cornerRadius="12dp"/>
+                <TextView
+                    android:id="@+id/tvMandiData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Select options above to load prices."
+                    android:textColor="#AFAFAF"
+                    android:textSize="16sp"
+                    android:lineSpacingExtra="8dp"/>
+            </LinearLayout>
+
+            <!-- 3. MERGED FORECAST (WATER + WEATHER) LAYOUT -->
+            <ScrollView
+                android:id="@+id/layoutForecast"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- GROUNDWATER SECTION CARD -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="#1E1A29"
+                        android:padding="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:elevation="4dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp">
+                            <TextView
+                                android:id="@+id/tvWaterHeader"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="💧 Groundwater Level Prediction"
+                                android:textColor="#FFFFFF"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:layout_centerVertical="true"/>
+                            <TextView
+                                android:id="@+id/btnToggleWater"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="▼"
+                                android:textColor="#FFFFFF"
+                                android:textSize="20sp"
+                                android:padding="8dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"/>
+                        </RelativeLayout>
+
+                        <Button
+                            android:id="@+id/btnRefreshWater"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:text="Scan Aquifers"
+                            android:backgroundTint="#2962FF"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="12dp"
+                            app:cornerRadius="12dp"/>
+
+                        <LinearLayout
+                            android:id="@+id/layoutWaterContent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+                            <TextView
+                                android:id="@+id/tvWaterData"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Ready to analyze water tables."
+                                android:textColor="#AFAFAF"
+                                android:textSize="15sp"
+                                android:lineSpacingExtra="6dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- WEATHER SECTION CARD -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="#1E1A29"
+                        android:padding="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:elevation="4dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp">
+                            <TextView
+                                android:id="@+id/tv7DayForecast"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Weather Prediction 7-Day Forecast"
+                                android:textColor="#FFFFFF"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:layout_centerVertical="true"/>
+                            <TextView
+                                android:id="@+id/btnToggleWeather"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="▼"
+                                android:textColor="#FFFFFF"
+                                android:textSize="20sp"
+                                android:padding="8dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"/>
+                        </RelativeLayout>
+
+                        <Button
+                            android:id="@+id/btnRefreshWeather"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:text="Refresh Location &amp; Forecast"
+                            android:backgroundTint="#2962FF"
+                            android:textColor="#FFFFFF"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="16dp"
+                            app:cornerRadius="12dp"/>
+
+                        <LinearLayout
+                            android:id="@+id/layoutWeatherContent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginBottom="16dp">
+                                <TextView
+                                    android:id="@+id/tvWeatherLocation"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="📍 Location..."
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginBottom="16dp">
+                                <TextView
+                                    android:id="@+id/tvCurrentTemp"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="--°C"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="54sp"
+                                    android:textStyle="bold" />
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:gravity="end">
+                                    <TextView
+                                        android:id="@+id/tvWeatherCondition"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="..."
+                                        android:textColor="#FFFFFF"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold" />
+                                    <TextView
+                                        android:id="@+id/tvFeelsLike"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="..."
+                                        android:textColor="#AFAFAF"
+                                        android:textSize="14sp"
+                                        android:layout_marginTop="4dp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <HorizontalScrollView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:scrollbars="none"
+                                android:layout_marginBottom="16dp">
+                                <LinearLayout
+                                    android:id="@+id/containerHourly"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal" />
+                            </HorizontalScrollView>
+
+                            <HorizontalScrollView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:scrollbars="none"
+                                android:layout_marginBottom="24dp">
+                                <LinearLayout
+                                    android:id="@+id/containerDaily"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:background="#2E2836"
+                                    android:padding="12dp" />
+                            </HorizontalScrollView>
+
+                            <TextView
+                                android:id="@+id/tvPrecipitationHeader"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="💧 Precipitation"
+                                android:textColor="#FFFFFF"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="12dp"/>
+
+                            <HorizontalScrollView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:scrollbars="none"
+                                android:layout_marginBottom="20dp">
+                                <LinearLayout
+                                    android:id="@+id/containerRain"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="bottom" />
+                            </HorizontalScrollView>
+
+                            <TextView
+                                android:id="@+id/tvWeatherAdvisory"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="💡 Weather data will appear here."
+                                android:textColor="#00E676"
+                                android:textSize="15sp"
+                                android:lineSpacingExtra="6dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+
+            <!-- 4. DYNAMIC SCHEMES WIZARD LAYOUT -->
+            <LinearLayout
+                android:id="@+id/layoutSchemes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvSchemeHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🏛️ Govt Scheme Matcher"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <LinearLayout
+                    android:id="@+id/layoutSchemeStateSelection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvSchemeStateLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select State/UT:"
+                        android:textColor="#AFAFAF"
+                        android:layout_marginBottom="4dp"/>
+                    <Spinner
+                        android:id="@+id/spinnerSchemeState"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="#2E2836"
+                        android:popupBackground="#2E2836"
+                        android:layout_marginBottom="24dp"/>
+
+                    <Button
+                        android:id="@+id/btnStartSchemeMatch"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="Start Eligibility Check"
+                        android:backgroundTint="#FF9800"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        app:cornerRadius="12dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutSchemeQuestionEngine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvDynamicQuestionHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Evaluating Eligibility..."
+                        android:textColor="#90CAF9"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:id="@+id/tvDynamicQuestionText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Question appears here"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="16dp"/>
+
+                    <FrameLayout
+                        android:id="@+id/containerDynamicInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"/>
+
+                    <Button
+                        android:id="@+id/btnNextSchemeQuestion"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="Next"
+                        android:backgroundTint="#00E676"
+                        android:textColor="#000000"
+                        android:textStyle="bold"
+                        app:cornerRadius="12dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutSchemeResults"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/btnRestartSchemeMatch"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="Start Over"
+                        android:backgroundTint="#2E2836"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="16dp"
+                        app:cornerRadius="12dp"/>
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+                        <LinearLayout
+                            android:id="@+id/containerSchemesResult"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"/>
+                    </ScrollView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 5. NEW: DISEASE PREDICTION LAYOUT -->
+            <LinearLayout
+                android:id="@+id/layoutDisease"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvDiseaseHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🌿 Crop Disease Scanner"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <ImageView
+                    android:id="@+id/ivDiseasePreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="#2E2836"
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/ic_menu_camera"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp"
+                    android:weightSum="2">
+
+                    <Button
+                        android:id="@+id/btnTakePhoto"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:text="Take Photo"
+                        android:backgroundTint="#2962FF"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginEnd="8dp"
+                        app:cornerRadius="12dp"/>
+
+                    <Button
+                        android:id="@+id/btnUploadGallery"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:text="Gallery"
+                        android:backgroundTint="#FF9800"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginStart="8dp"
+                        app:cornerRadius="12dp"/>
+                </LinearLayout>
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <TextView
+                        android:id="@+id/tvDiseaseResult"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Upload a photo of a leaf to check for 387 diseases across 59 crops."
+                        android:textColor="#AFAFAF"
+                        android:textSize="16sp"
+                        android:lineSpacingExtra="6dp"/>
+                </ScrollView>
+            </LinearLayout>
         </FrameLayout>
+
+        <!-- BOTTOM NAVIGATION BAR (NOW 5 TABS) -->
+        <LinearLayout
+            android:id="@+id/bottomNavLayout"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="#120F1A"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:elevation="16dp">
+            <LinearLayout
+                android:id="@+id/tabChat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🎙️" android:textSize="20sp"/>
+                <TextView android:id="@+id/tvTabChat" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="AI Chat" android:textColor="#FFFFFF" android:textSize="12sp" android:textStyle="bold"/>
+            </LinearLayout>
+            <!-- NEW TAB: DISEASE -->
+            <LinearLayout
+                android:id="@+id/tabDisease"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🌿" android:textSize="20sp"/>
+                <TextView android:id="@+id/tvTabDisease" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Scan" android:textColor="#AFAFAF" android:textSize="12sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/tabMandi"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🌾" android:textSize="20sp"/>
+                <TextView android:id="@+id/tvTabMandi" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mandi" android:textColor="#AFAFAF" android:textSize="12sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/tabForecast"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🌦️" android:textSize="20sp"/>
+                <TextView android:id="@+id/tvTabForecast" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Forecast" android:textColor="#AFAFAF" android:textSize="12sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/tabSchemes"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏛️" android:textSize="20sp"/>
+                <TextView android:id="@+id/tvTabSchemes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Schemes" android:textColor="#AFAFAF" android:textSize="12sp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- LANGUAGE SELECTOR OVERLAY -->
+        <LinearLayout
+            android:id="@+id/languageSelectorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#120F1A"
+            android:orientation="vertical"
+            android:translationZ="10dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:padding="16dp">
+                <TextView
+                    android:id="@+id/btnCloseLanguage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="✖"
+                    android:textColor="#FFFFFF"
+                    android:textSize="26sp"
+                    android:padding="8dp"
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingHorizontal="32dp"
+                android:paddingBottom="32dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome to AgriKosh"
+                    android:textColor="#FFFFFF"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select your primary language. You can still use English words naturally."
+                    android:textColor="#AFAFAF"
+                    android:textAlignment="center"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="32dp"/>
+
+                <Button android:id="@+id/btnLangHindi" style="@style/LangButton" android:text="Hindi (हिंदी)" />
+                <Button android:id="@+id/btnLangPunjabi" style="@style/LangButton" android:text="Punjabi (ਪੰਜਾਬੀ)" />
+                <Button android:id="@+id/btnLangMarathi" style="@style/LangButton" android:text="Marathi (मराठी)" />
+                <Button android:id="@+id/btnLangBengali" style="@style/LangButton" android:text="Bengali (বাংলা)" />
+                <Button android:id="@+id/btnLangEnglish" style="@style/LangButton" android:text="English" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-    <!-- BOTTOM NAVIGATION BAR -->
+
+    <!-- SLIDING SIDE DRAWER FOR CHAT HISTORY -->
     <LinearLayout
-        android:id="@+id/bottomNavLayout"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:id="@+id/drawerMenuLayout"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
         android:background="#120F1A"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:elevation="16dp">
+        android:orientation="vertical"
+        android:padding="16dp">
+
         <LinearLayout
-            android:id="@+id/tabChat"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🎙️" android:textSize="20sp"/>
-            <TextView android:id="@+id/tvTabChat" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="AI Chat" android:textColor="#FFFFFF" android:textSize="12sp" android:textStyle="bold"/>
+            android:id="@+id/btnDrawerNewChat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="#2E2836"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="➕"
+                android:textSize="20sp"
+                android:layout_marginEnd="12dp"/>
+            <TextView
+                android:id="@+id/tvDrawerNewChatText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Chat"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvDrawerRecentChatsHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recent Chats"
+            android:textColor="#AFAFAF"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <LinearLayout
+                android:id="@+id/historyContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
         <LinearLayout
-            android:id="@+id/tabDisease"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🌿" android:textSize="20sp"/>
-            <TextView android:id="@+id/tvTabDisease" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Scan" android:textColor="#AFAFAF" android:textSize="12sp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/tabMandi"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🌾" android:textSize="20sp"/>
-            <TextView android:id="@+id/tvTabMandi" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mandi" android:textColor="#AFAFAF" android:textSize="12sp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/tabForecast"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🌦️" android:textSize="20sp"/>
-            <TextView android:id="@+id/tvTabForecast" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Forecast" android:textColor="#AFAFAF" android:textSize="12sp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/tabSchemes"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏛️" android:textSize="20sp"/>
-            <TextView android:id="@+id/tvTabSchemes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Schemes" android:textColor="#AFAFAF" android:textSize="12sp"/>
+            android:id="@+id/btnDrawerChangeLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="#2E2836"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🌐"
+                android:textSize="20sp"
+                android:layout_marginEnd="12dp"/>
+            <TextView
+                android:id="@+id/tvDrawerChangeLanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Change Language"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
         </LinearLayout>
     </LinearLayout>
+
 </androidx.drawerlayout.widget.DrawerLayout>
